@@ -7,7 +7,7 @@ RSpec.describe Like, type: :model do
                      likes_counter: 6)
   end
 
-  it 'should increment likes_counter by 1' do
+  it 'increments likes_counter by 1' do
     @post.increment!(:likes_counter)
     expect(@post.likes_counter).to eq(7)
   end

@@ -7,7 +7,7 @@ RSpec.describe Comment, type: :model do
                      likes_counter: 6)
   end
 
-  it 'should increment comment_counter by 1' do
+  it 'increments comment_counter by 1' do
     @post.increment!(:comments_counter)
     expect(@post.comments_counter).to eq(5)
   end
