@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Post', type: :request do
   describe 'Get post Index' do
     before :each do
-      get '/users/:user_id/posts/'
+      get '/users/:id/posts/'
     end
 
     it 'Returns http status of success for post index' do
