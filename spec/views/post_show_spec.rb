@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 RSpec.describe 'posts/show.html.erb', type: :view do
   describe 'a user show page' do
     before(:each) do
