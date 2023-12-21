@@ -7,7 +7,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  database: blogapps
+  database: blogs
   username: postgres
   password: 1111
   host: localhost
@@ -16,15 +16,15 @@ default: &default
 
 development:
   <<: *default
-  database: blogapps
+  database: blogs
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: blogapps
+  database: blogs
 
 production:
   <<: *default
-  database: blogapps
+  database: blogs
