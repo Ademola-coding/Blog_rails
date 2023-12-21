@@ -1,32 +1,60 @@
-<section>
-  <div class='single-user'>
-    <div class='user-photo'>
-      <img src='<%= @user.photo %>' alt='<%= @user.name %> thumbnail' />
-    </div>
-    <div class='user-name'>
-      <h2><%= @user.name %></h2>
-      <p>Number of Posts: <%= @user.posts_counter %></p>
-    </div>
-  </div>
-  <div class='user-posts'>
-    <% @user.posts.each do |post| %>
-      <div class='list-posts'>
-        <h5><%= link_to post.title, user_post_path(@user, post) %></h5>
-        <p><%= post.text %></p>
-        <span class='like-comment'>
-          Comments: <%= post.comments_counter || 0 %>, 
-          Likes: <%= post.likes_counter || 0 %> 
-        </span>
+<h1 class="users_show_header">User Posts Details</h1>
+<div class="users_wrapper">
+  <div class="users_show_main_container">
+    <%= image_tag(@user.photo || "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=455&q=80", class: "user_image_card") %>
+    <div class="user_info_container">
+      <h2> <%= @user.name %> </h2>
+      <div class="user_info_posts_counter">
+        Number of posts:
+        <%= @user.posts_counter || 0 %>
       </div>
-      <ul class='post-comment'>
-        <% if post.five_recent_comments %>
-          <p>No comments added!</p>
-        <% else %>
-          <% post.five_recent_comments.each do |comment| %>
-            <li><%= comment.users.name %>: <%= comment.text %></li>
-          <% end %>
-        <% end %>
-      </ul>
-    <% end %>
+    </div>
+    <div class="create_post_wrapper">
+    <a href="/posts/new" class="create_new_post_link">
+      Create New Post
+    </a>
   </div>
-</section>
+  </div>
+</div>
+
+<div class="users_wrapper">
+  <% @user.three_most_recent_posts.each do |post| %>
+    <a href="/users/<%= @user.id %>/posts/<%= post.id %>" class="user_index_container">
+      <div class="user_info">
+        <h2><%= post.title %></h2>
+        <p class="post_text"><%= post.text %></p>
+        <div class="user_info__posts_counter">
+          Comments:
+          <%= post.comments_counter || 0 %>
+          , Likes:
+          <%= post.likes_counter || 0 %>
+        </div>
+      </div>
+    </a>
+
+    <%= form_with url: "/likes/#{post.id}", html: {class: "new_like"} do |form| %>
+      <%= form.submit "Like", class: "new_like_btn" %>
+    <% end %>
+
+    <%= form_with url: "/comments/#{post.id}", scope: :comment, html: {class: "new_comment"} do |form| %>
+      <%= form.text_area :text, placeholder: "Enter comment text", class: "form_comment" %>
+      <%= form.submit "Comment", class: "new_comment_btn" %>
+    <% end %>
+    <div class="comments_info"> 
+      <% if post.five_most_recent_comments.length > 0 %>
+        <% post.five_most_recent_comments.each do |comment| %>
+          <div class="comment_info">
+            <h4> <%= comment.user.name %>'s comment: </h4> 
+            &nbsp;&nbsp;
+            <p class ="comment_text"> <%= comment.text %> </p>
+          </div>
+        <% end %>
+      <% else %>
+        <p> No comments exist yet </p>
+      <% end %>
+    </div>
+    <br>
+    <hr />
+    <br>
+  <% end %>
+</div>

@@ -1,29 +1,23 @@
-<section class="container">
-  <div class="post-info">
-    <div class="post-title-box">
-      <p class="post-title">Post : <%= @post.title %> by <%= @post.author.name %></p>
-     
-    </div>
-    <p><%= @post.text %></p>
-     <p class="comment-text">Comments: <%= @post.comments_counter || 0 %>, Likes: <%= @post.likes_counter || 0 %></p>
-  </div>
-  <div class="comment-info">
-    <% @post.five_recent_comments.each do |comment| %>
-      <div>
-        <p>
-          <span>
-            <%= comment.author.name %>:
-          </span>
-          <span>
-            <%= comment.text %>
-          </span>
-        </p>
+<div class="users_wrapper">
+    <div class="users_index_main_container">
+      <div class="user_info">
+        <h1><%= @post.title %> by <%= @post.user.name %></h1>
+        <div class="user_info_posts_counter">
+          Comments:
+          <%= @post.comments_counter || 0 %>
+          , Likes:
+          <%= @post.likes_counter || 0 %>
+        </div>
+        <p class="post_text"><%= @post.text %></p>
       </div>
-    <% end %>
-  </div>
-
-  <div>
-  <%= render "likes/add_like" %>
-  </div>
-  <%= render "comments/add_comment" %>
-</section>
+    </div>
+    <div class="comments_info_container"> 
+      <% @post.five_most_recent_comments.each_with_index do |comment, index| %>
+        <div class="comment_info">
+          <h4> <%= comment.user.name %>'s comment: </h4> 
+          &nbsp;&nbsp;
+          <p class = 'comment_text'> <%= comment.text %> </p>
+        </div>
+      <% end %>
+    </div>
+</div>

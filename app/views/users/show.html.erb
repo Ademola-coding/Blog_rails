@@ -1,27 +1,36 @@
-<section class="container">
-  <div class="user-box">
-    <img class="image-user" src=<%= @user.photo %> alt="user"/>
-    <div class="user-info">
-      <p class="user-name"><%= @user.name %></p>
-      <p class="user-post">Number of posts: <%= @user.posts_counter%></p>
+<h1 class="users_show_header">Users Details</h1>
+<div class="users_wrapper">
+  <div class="users_show_main_container">
+    <%= image_tag(@user.photo || "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=455&q=80", class: "user_image_card") %>
+    <div class="user_info_container">
+      <h2> <%= @user.name %> </h2>
+      <div class="user_info__posts_counter">
+        Number of posts:
+        <%= @user.posts_counter || 0 %>
+      </div>
     </div>
   </div>
-  <p class="user-bio"><%= @user.bio %></p>
-  <% @user.three_most_recent_post.each do |post| %>
-    <%= link_to user_post_path(@user.id, post.id) do %>
-      <div class="user-recent-post">
-        <p class="post-title"><strong>Post</strong> : <%= post.title %></p>
-        <p class="post-text"><%= post.text %></p>
-        <h3 class="counters">Comments: <%= post.comments_counter %> <h3>
-         <h3> Likes: <%= post.likes_counter %> <h3 >
-          
-          </div>
-        <% end %>
-      <% end %>
-      <div class="button-user">
-        <button class="button">
-          <%= link_to "See all posts", user_posts_path(@user), class:"text-button" %>
-        </button>
+  <div class="bio_container">
+    <h3>Bio</h3>
+    <p class="bio_info">
+      <%= @user.bio %>
+    </p>
+  </div>
+</div>
+
+<div class="users_wrapper">
+  <% @user.three_most_recent_posts.each_with_index do |post, index| %>
+    <a href="/users/<%= @user.id %>/posts" class="user_index_container">
+      <div class="user_info_container">
+        <h2>Post #<%= index+1 %></h2>
+        <p class="post_text"><%= post.text %></p>
+        <div class="user_info__posts_counter">
+          Comments:
+          <%= post.comments_counter || 0 %>
+          , Likes:
+          <%= post.likes_counter || 0 %>
+        </div>
       </div>
-    </section>
-    
+    </a>
+  <% end %>
+</div>

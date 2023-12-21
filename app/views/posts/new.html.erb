@@ -1,19 +1,15 @@
-<section class="container">
-<p class="post-title"> Add New Post :</p>
-<%= form_with model: @post, url: user_posts_path do |f| %>
-     <div>
-     <%= f.label :title %> <br>
-     <%= f.text_field :title %>
-     </div>
-
-     <div>
-     <%= f.label :text %> <br>
-     <%= f.text_field :text %>
-     </div>
-     <br>
-     <div>
-     <%= f.submit "Submit Post" %>
-     </div>
-<% end %>
-
-</section>
+<div class="form_container">
+  <%= form_with model: @post, url: '/posts', html: {class: "new_post"} do |form| %>
+    <div class="control_container">
+      <%= form.label :title %><br>
+      <%= form.text_field :title, class: "form_control", placeholder: "Enter post title" %>
+    </div>
+    <div class="control_container">
+      <%= form.label :text %><br>
+      <%= form.text_area :text, class: "form_control", placeholder: "Enter post text" %>
+    </div>
+    <div class="control_container button_container">
+      <%= form.submit "Post", class: "submit_btn" %>
+    </div>
+  <% end %>
+</div>
