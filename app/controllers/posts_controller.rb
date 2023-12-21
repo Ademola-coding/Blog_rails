@@ -1,30 +1,31 @@
 class PostsController < ApplicationController
   def index
-    @user = User.find(params[:user_id])
+    @user = User.includes(:posts).find(params[:user_id])
   end
 
   def show
-    @post = Post.find(params[:id])
+    @post = User.find(params[:user_id]).posts.find(params[:id])
   end
 
   def new
     @post = Post.new
-  end
-
-  def create
-    @post = current_user.posts.new(post_params)
-    if @post.save
-      flash[:success] = 'Post has benn created successfully'
-      redirect_to user_post_path(current_user, @post)
-    else
-      flash.now[:error] = 'Error: Post was not created !!'
-      render :new
+    respond_to do |format|
+      format.html { render :new, locals: { post: @post } }
     end
   end
 
-  private
-
-  def post_params
-    params.require(:post).permit(:title, :text)
+  def create
+    post = current_user.posts.new(params.require(:post).permit(:title, :text))
+    respond_to do |format|
+      format.html do
+        if post.save
+          flash[:success] = 'Post saved successfully'
+          redirect_to "/users/#{current_user.id}/posts"
+        else
+          flash.now[:error] = 'Error: Post could not be saved'
+          render :new, locals: { post: }
+        end
+      end
+    end
   end
 end
