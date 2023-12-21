@@ -1,23 +1,41 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  before(:all) do
-    @user = User.new(name: 'John', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Teacher from Poland.')
-    @post = Post.new(title: 'My first post', text: 'This is my first post.', author: @user, comments_counter: 4,
-                     likes_counter: 6)
-  end
-
-  context 'Test implementation to post model' do
-    it 'Check the lenghth of post title to be less than 250' do
-      expect(@post.title).to(satisfy { |x| x.length <= 250 })
+  describe 'post model validations' do
+    subject do
+      Post.new
     end
 
-    it 'most recent post length should returns zero' do
-      expect(@post.five_recent_comments.length).to be 0
+    before { subject.save }
+
+    it 'title presence' do
+      subject.title = nil
+      expect(subject).to_not be_valid
     end
 
-    it 'likes count validation should return true' do
-      expect(@post.likes_counter).to(satisfy { |n| n >= 0 })
+    it 'title should not exceed 250 char' do
+      subject.title = 'post 1' * 251
+      expect(subject).to_not be_valid
+    end
+
+    it 'comments counter should be integer ' do
+      subject.comments_counter = 1.7
+      expect(subject).to_not be_valid
+    end
+
+    it 'comments counter should be greater or equal to 0 ' do
+      subject.comments_counter = -1
+      expect(subject).to_not be_valid
+    end
+
+    it 'Likes counter should be integer ' do
+      subject.likes_counter = 1.7
+      expect(subject).to_not be_valid
+    end
+
+    it 'Likes counter should be greater or equal to 0 ' do
+      subject.likes_counter = -1
+      expect(subject).to_not be_valid
     end
   end
 end

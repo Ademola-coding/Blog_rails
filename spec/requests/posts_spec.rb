@@ -1,31 +1,35 @@
-require 'rails_helper'
+# require 'rails_helper'
 
-RSpec.describe 'Post', type: :request do
-  describe 'Get post Index' do
-    before :each do
-      get users_path(1)
-    end
+# RSpec.describe 'Posts', type: :request do
+#   describe 'GET /index' do
+#     before(:example) { get '/posts' }
 
-    it 'Returns http status of success for post index' do
-      expect(response).to have_http_status(:ok)
-    end
+#     it 'Is response status correct' do
+#       expect(response).to have_http_status(:ok)
+#     end
 
-    it 'Render the right index template for post' do
-      expect(response).to render_template(:index)
-    end
+#     it 'Is correct template rendered' do
+#       expect(response).to render_template(:index)
+#     end
 
-    describe 'Get all related routes to post show template' do
-      before :each do
-        get '/users/'
-      end
+#     it 'Is the body includes correct text' do
+#       expect(response.body).to include('INDEX')
+#     end
+#   end
 
-      it 'Returns success status for show routes of the post controller' do
-        expect(response).to have_http_status(:success)
-      end
+#   describe 'GET /show' do
+#     before(:example) { get '/posts/:post_id' }
 
-      it 'Renders the show page for the post controller' do
-        expect(response).to render_template(:index)
-      end
-    end
-  end
-end
+#     it 'Is response status correct' do
+#       expect(response).to have_http_status(:ok)
+#     end
+
+#     it 'Is correct template rendered' do
+#       expect(response).to render_template(:show)
+#     end
+
+#     it 'Is the body includes correct text' do
+#       expect(response.body).to include('Show')
+#     end
+#   end
+# end

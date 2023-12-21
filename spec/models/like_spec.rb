@@ -1,14 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe Like, type: :model do
-  before(:all) do
-    @user = User.new(name: 'Lilly', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Teacher from Poland.')
-    @post = Post.new(title: 'My first post', text: 'This is my first post.', author: @user, comments_counter: 4,
-                     likes_counter: 6)
+  subject do
+    Like.new(
+      post: Post.new(
+        user: User.new(
+          name: 'Haddis', photo: 'https://unsplash.com/photos/-rwqO6Jvo_M',
+          bio: 'Teacher from AASTU.',
+          posts_counter: 0
+        ), title: 'Java', text: 'This is my first post',
+        likes_counter: 0, comments_counter: 0
+      ),
+      user: User.new(name: 'Haddis', photo: 'https://unsplash.com/photos/-rwqO6Jvo_M', bio: 'Teacher from AASTU.',
+                     posts_counter: 0)
+    )
   end
 
-  it 'increments likes_counter by 1' do
-    @post.increment!(:likes_counter)
-    expect(@post.likes_counter).to eq(7)
+  before { subject.save }
+
+  it 'comments_counter should return a right result when calling it with after_save' do
+    expect(subject.post.likes_counter).to eq(1)
   end
 end
