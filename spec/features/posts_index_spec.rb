@@ -73,7 +73,7 @@ RSpec.describe 'User post index page', type: :feature do
     it "When I click on a post, it redirects me to that post's show page" do
       visit user_posts_path(@hana)
       click_link 'Hello'
-      expect(current_path).to eq user_post_path(@hana, @hello)
+      expect(page).to have_current_path user_post_path(@hana, @hello), ignore_query: true
     end
   end
 end

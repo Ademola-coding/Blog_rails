@@ -35,7 +35,7 @@ RSpec.describe 'User index page', type: :feature do
     it "When I click on a user, I am redirected to that user's show page" do
       visit root_path
       click_link 'Hana'
-      expect(current_path).to eq user_path(@hana)
+      expect(page).to have_current_path user_path(@hana), ignore_query: true
     end
   end
 
@@ -67,7 +67,7 @@ RSpec.describe 'User index page', type: :feature do
     it "When I click on a user, I am redirected to that user's show page" do
       visit root_path
       click_link 'Kumilachew'
-      expect(current_path).to eq user_path(@kumie)
+      expect(page).to have_current_path user_path(@kumie), ignore_query: true
     end
   end
 end
