@@ -10,6 +10,7 @@
   border: 1px solid black;
   border-radius: 10px;
 }
+
 .control_container {
   display: flex;
   gap: 4px;
@@ -33,6 +34,6 @@
   padding: 3px;
   font-size: 1.2rem;
   background-color: #047504;
-  color: #ffffff;
+  color: #fff;
   border-radius: 4px;
 }
