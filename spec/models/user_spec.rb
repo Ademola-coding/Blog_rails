@@ -1,31 +1,28 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe 'User model validations' do
-    subject do
-      User.new
-    end
+  describe 'Validations' do
+    it { should validate_presence_of(:name) }
+    it { should validate_numericality_of(:posts_counter).only_integer.is_greater_than_or_equal_to(0) }
+  end
 
-    before { subject.save }
+  describe 'Associations' do
+    it { should have_many(:posts).with_foreign_key('author_id') }
+    it { should have_many(:comments).with_foreign_key('author_id') }
+    it { should have_many(:likes) }
+  end
 
-    it 'name presence' do
-      subject.name = nil
-      expect(subject).to_not be_valid
-    end
+  describe '#three_most_recent_posts' do
+    let(:user) { create(:user) }
+    let!(:old_post) { create(:post, author: user, created_at: 1.year.ago, text: 'Sample content') }
 
-    it 'bio presence' do
-      subject.bio = nil
-      expect(subject).to_not be_valid
-    end
+    let!(:recent_posts) { create_list(:post, 3, author: user, created_at: Time.now) }
 
-    it 'posts counter should be integer ' do
-      subject.posts_counter = 1.7
-      expect(subject).to_not be_valid
-    end
+    it 'returns the three most recent posts' do
+      expected_posts = recent_posts.sort_by(&:created_at).reverse.map(&:to_json)
+      actual_posts = user.three_most_recent_posts.to_a.sort_by(&:created_at).reverse.map(&:to_json)
 
-    it 'posts counter should be greater or equal to 0 ' do
-      subject.posts_counter = -1
-      expect(subject).to_not be_valid
+      expect(actual_posts).to eq(expected_posts)
     end
   end
 end

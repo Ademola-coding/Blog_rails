@@ -1,41 +1,38 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  describe 'post model validations' do
-    subject do
-      Post.new
+  let(:user) { create(:user) }
+
+  describe 'Associations' do
+    it { should belong_to(:author).class_name('User').with_foreign_key('author_id') }
+    it { should have_many(:comments) }
+    it { should have_many(:likes) }
+  end
+
+  describe 'Validations' do
+    it { should validate_presence_of(:title) }
+    it { should validate_length_of(:title).is_at_most(250) }
+    it { should validate_numericality_of(:comments_counter).only_integer.is_greater_than_or_equal_to(0) }
+    it { should validate_numericality_of(:likes_counter).only_integer.is_greater_than_or_equal_to(0) }
+  end
+
+  describe '#five_most_recent_comments' do
+    it 'returns the five most recent comments for the post' do
+      post = create(:post, author: user)
+      create_list(:comment, 5, post:, created_at: 1.month.ago)
+      recent_comments = create_list(:comment, 5, post:)
+
+      expected_comment_ids = recent_comments.pluck(:id).sort.reverse
+      actual_comment_ids = post.five_most_recent_comments.pluck(:id).sort.reverse
+
+      expect(actual_comment_ids).to eq(expected_comment_ids)
     end
+  end
 
-    before { subject.save }
-
-    it 'title presence' do
-      subject.title = nil
-      expect(subject).to_not be_valid
-    end
-
-    it 'title should not exceed 250 char' do
-      subject.title = 'post 1' * 251
-      expect(subject).to_not be_valid
-    end
-
-    it 'comments counter should be integer ' do
-      subject.comments_counter = 1.7
-      expect(subject).to_not be_valid
-    end
-
-    it 'comments counter should be greater or equal to 0 ' do
-      subject.comments_counter = -1
-      expect(subject).to_not be_valid
-    end
-
-    it 'Likes counter should be integer ' do
-      subject.likes_counter = 1.7
-      expect(subject).to_not be_valid
-    end
-
-    it 'Likes counter should be greater or equal to 0 ' do
-      subject.likes_counter = -1
-      expect(subject).to_not be_valid
+  describe '#update_post_counter' do
+    it 'updates the author\'s post_counter' do
+      create(:post, author: user)
+      expect { create(:post, author: user) }.to change { user.reload.posts_counter }.by(1)
     end
   end
 end

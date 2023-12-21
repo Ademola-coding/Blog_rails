@@ -1,29 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-  subject do
-    Comment.new(
-      post: Post.new(
-        user: User.new(
-          name: 'Haddis',
-          photo: 'https://unsplash.com/photos/-rwqO6Jvo_M',
-          bio: 'Teacher from AASTU.',
-          posts_counter: 0
-        ),
-        title: 'Java',
-        text: 'This is my first post',
-        likes_counter: 0,
-        comments_counter: 0
-      ),
-      user: User.new(name: 'Haddis', photo: 'https://unsplash.com/photos/-rwqO6Jvo_M', bio: 'Teacher from AASTU.',
-                     posts_counter: 0),
-      text: 'This is the comment'
-    )
+  let(:user) { create(:user) }
+  let(:post) { create(:post, author: user) }
+
+  describe 'Associations' do
+    it { should belong_to(:author).class_name('User').with_foreign_key('author_id') }
+    it { should belong_to(:post) }
   end
 
-  before { subject.save }
+  describe '#update_comments_counter' do
+    it 'updates the post\'s comments_counter' do
+      # post = Post.create!(author: create(:user), title: 'Sample Title', text: 'This is a sample post content.')
 
-  it 'update_post_comments_counter should return a right result when calling it with after_save' do
-    expect(subject.post.comments_counter).to eq(1)
+      create(:comment, post:, author: user)
+
+      expect { create(:comment, post:, author: user) }.to change { post.reload.comments_counter }.by(1)
+    end
   end
 end
