@@ -1,31 +1,32 @@
 class PostsController < ApplicationController
   def index
-    @user = User.includes(:posts).find(params[:user_id])
+    @user = User.find(params[:user_id])
+    @posts = @user.posts.includes(:likes, { comments: :author }).paginate(page: params[:page], per_page: 3)
   end
 
   def show
-    @post = User.find(params[:user_id]).posts.find(params[:id])
+    @user = User.find(params[:user_id])
+    @post = @user.posts.includes(:likes, { comments: :author }).find(params[:id])
+    @recent_comments = @post.five_recent_comments
   end
 
   def new
+    @user = User.find(params[:user_id])
     @post = Post.new
-    respond_to do |format|
-      format.html { render :new, locals: { post: @post } }
-    end
   end
 
   def create
-    post = current_user.posts.new(params.require(:post).permit(:title, :text))
-    respond_to do |format|
-      format.html do
-        if post.save
-          flash[:success] = 'Post saved successfully'
-          redirect_to "/users/#{current_user.id}/posts"
-        else
-          flash.now[:error] = 'Error: Post could not be saved'
-          render :new, locals: { post: }
-        end
-      end
+    @post = current_user.posts.build(post_params)
+    if @post.save
+      redirect_to root_path, notice: 'Post created successfully'
+    else
+      render :new
     end
+  end
+
+  private
+
+  def post_params
+    params.require(:post).permit(:title, :text)
   end
 end

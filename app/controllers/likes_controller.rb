@@ -1,17 +1,16 @@
 class LikesController < ApplicationController
   def create
-    like = current_user.likes.new
-    like.post_id = params[:post_id]
-    respond_to do |format|
-      format.html do
-        if like.save
-          flash[:success] = 'Like saved successfully'
-          redirect_to "/users/#{current_user.id}/posts"
-        else
-          flash.now[:error] = 'Error!: Post could not be saved'
-          render :new, locals: { like: }
-        end
-      end
-    end
+    @post = Post.find(params[:post_id])
+    @like = @post.likes.build(user: current_user)
+    return unless @like.save
+
+    redirect_to user_post_path(@post.author, @post), notice: 'Liked!'
+  end
+
+  def destroy
+    @post = Post.find(params[:id])
+    @like = @post.likes.find_by(user: current_user)
+    @like&.destroy
+    redirect_to user_post_path(@post.author, @post), notice: 'Unliked!'
   end
 end
