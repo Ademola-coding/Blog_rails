@@ -1,15 +1,20 @@
-<h1 class="users_index_header">Show all users</h1>
-<div class="users_wrapper">
-  <% @users.each do |user| %>
-    <a href="/users/<%= user.id %>" class="user_index_main_container">
-      <%= image_tag(user.photo || "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=455&q=80", class: "user_image_card") %>
-      <div class="user_info_container">
-         <h2> <%= user.name %> </h2>
-          <div class="user_info__posts_counter">
-           Number of posts:
-           <%= user.posts_counter || 0 %>
-         </div>
+<div class="container mt-5">
+  <h1 class="mb-4">Users List</h1>
+  <div class="row">
+    <% @users.each do |user| %>
+      <div class="col-12 mb-4">
+        <div class="d-flex align-items-start">
+          <div class="p-3">
+            <img src="path_to_default_profile_pic.jpg" alt="Profile" class="img-thumbnail" style="width: 100px; height: 100px;">
+          </div>
+          <div class="border p-3 flex-grow-1 d-flex flex-column">
+            <h4><%= link_to user.name, user_path(user) %></h4>
+            <div class="mt-auto text-right">
+              <small><%= user.posts_counter %> posts</small>
+            </div>
+          </div>
+        </div>
       </div>
-    </a>
-  <% end %>
+    <% end %>
+  </div>
 </div>

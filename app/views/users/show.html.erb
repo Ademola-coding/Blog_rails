@@ -1,36 +1,28 @@
-<h1 class="users_show_header">Users Details</h1>
-<div class="users_wrapper">
-  <div class="users_show_main_container">
-    <%= image_tag(@user.photo || "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=455&q=80", class: "user_image_card") %>
-    <div class="user_info_container">
-      <h2> <%= @user.name %> </h2>
-      <div class="user_info__posts_counter">
-        Number of posts:
-        <%= @user.posts_counter || 0 %>
+<div class="container mt-5">
+  <div class="d-flex align-items-start mb-4">
+    <div class="p-3">
+      <img src="path_to_default_profile_pic.jpg" alt="Profile" class="img-thumbnail" style="width: 100px; height: 100px;">
+    </div>
+    <div class="border p-3 flex-grow-1 d-flex flex-column">
+      <h4><%= @user.name %></h4>
+      <div class="mt-auto text-right">
+        <small><%= @user.posts.count %> posts</small>
       </div>
     </div>
   </div>
-  <div class="bio_container">
-    <h3>Bio</h3>
-    <p class="bio_info">
-      <%= @user.bio %>
-    </p>
-  </div>
-</div>
 
-<div class="users_wrapper">
-  <% @user.three_most_recent_posts.each_with_index do |post, index| %>
-    <a href="/users/<%= @user.id %>/posts" class="user_index_container">
-      <div class="user_info_container">
-        <h2>Post #<%= index+1 %></h2>
-        <p class="post_text"><%= post.text %></p>
-        <div class="user_info__posts_counter">
-          Comments:
-          <%= post.comments_counter || 0 %>
-          , Likes:
-          <%= post.likes_counter || 0 %>
-        </div>
+  <div class="mb-4">
+    <p><%= @user.bio %></p>
+  </div>
+
+  <% @recent_posts.each do |post| %>
+    <div class="card mb-4">
+      <div class="card-body">
+        <%= link_to post.title, user_post_path(@user, post) %>
+        <p><%= post.comments.count %> comments</p>
       </div>
-    </a>
+    </div>
   <% end %>
+
+  <%= link_to 'All posts', user_posts_path(@user), class: "btn btn-primary" %>
 </div>
