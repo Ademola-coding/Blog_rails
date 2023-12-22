@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-RSpec.feature "User's Posts Index", type: :feature do
+RSpec.feature "User's Posts Index", 
+  type: :feature do
   let(:user) do
     user = create(:user)
     create(:post, author: user)
