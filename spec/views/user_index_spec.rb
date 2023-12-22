@@ -27,7 +27,7 @@ RSpec.describe Post, type: :system do
   end
   describe 'when a user is clicked' do
     # I can click on a user's name to go to their show page.
-    it 'it should redirects to that users show page' do
+    it 'redirectses to that users show page' do
       # ? Factory Bot creates 5 users, so we need to take one of them to test. since all o them share
       # ? the same data (e.g. name).
       user = create(:user) # ! so just create a brand new one otherwise we get 'ambiguous match' error.
