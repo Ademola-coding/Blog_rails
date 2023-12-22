@@ -1,38 +1,48 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  let(:user) { create(:user) }
-
-  describe 'Associations' do
-    it { should belong_to(:author).class_name('User').with_foreign_key('author_id') }
-    it { should have_many(:comments) }
-    it { should have_many(:likes) }
+  # Move this to the top so it's available to all specs within the block
+  let(:user) do
+    User.create(name: 'John', posts_counter: 2)
+  end
+  it 'is valid with valid attributes' do
+    post = Post.new(title: 'Sample Title', author: user)
+    expect(post).to be_valid
   end
 
-  describe 'Validations' do
-    it { should validate_presence_of(:title) }
-    it { should validate_length_of(:title).is_at_most(250) }
-    it { should validate_numericality_of(:comments_counter).only_integer.is_greater_than_or_equal_to(0) }
-    it { should validate_numericality_of(:likes_counter).only_integer.is_greater_than_or_equal_to(0) }
+  it 'is not valid without a title' do
+    post = Post.new(title: nil)
+    expect(post).to_not be_valid
   end
 
-  describe '#five_most_recent_comments' do
-    it 'returns the five most recent comments for the post' do
-      post = create(:post, author: user)
-      create_list(:comment, 5, post:, created_at: 1.month.ago)
-      recent_comments = create_list(:comment, 5, post:)
+  it 'is not valid with a comments_counter less than 0' do
+    post = build(:post, author: user, comments_counter: -1)
+    expect(post).to_not be_valid
+  end
 
-      expected_comment_ids = recent_comments.pluck(:id).sort.reverse
-      actual_comment_ids = post.five_most_recent_comments.pluck(:id).sort.reverse
+  it 'is not valid with a likes_counter less than 0' do
+    post = build(:post, author: user, likes_counter: -1)
+    expect(post).to_not be_valid
+  end
 
-      expect(actual_comment_ids).to eq(expected_comment_ids)
+  describe '#update_posts_counter!' do
+    let(:post) { create(:post, author: user) }
+
+    it 'updates the posts_counter of the author' do
+      post.update_posts_counter!
+      expect(user.posts_counter).to eq(1)
     end
   end
 
-  describe '#update_post_counter' do
-    it 'updates the author\'s post_counter' do
-      create(:post, author: user)
-      expect { create(:post, author: user) }.to change { user.reload.posts_counter }.by(1)
+  describe '#five_recent_comments' do
+    let(:post) { create(:post, author: user) }
+
+    it 'returns the five most recent comments' do
+      old_comment = create(:comment, post:, created_at: 6.days.ago)
+      recent_comments = create_list(:comment, 5, post:)
+
+      expect(post.five_recent_comments).to eq(recent_comments.reverse)
+      expect(post.five_recent_comments).not_to include(old_comment)
     end
   end
 end

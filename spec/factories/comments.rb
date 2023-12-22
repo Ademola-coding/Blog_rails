@@ -1,6 +1,8 @@
+# spec/factories/comments.rb
+
 FactoryBot.define do
   factory :comment do
-    text { 'This is a sample comment' }
+    text { 'Sample Comment Content' }
     association :post
     association :author, factory: :user
   end

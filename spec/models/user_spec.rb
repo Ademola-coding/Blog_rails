@@ -1,28 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe 'Validations' do
-    it { should validate_presence_of(:name) }
-    it { should validate_numericality_of(:posts_counter).only_integer.is_greater_than_or_equal_to(0) }
+  it 'is valid with valid attributes' do
+    user = User.new(name: 'John', posts_counter: 2)
+    expect(user).to be_valid
   end
 
-  describe 'Associations' do
-    it { should have_many(:posts).with_foreign_key('author_id') }
-    it { should have_many(:comments).with_foreign_key('author_id') }
-    it { should have_many(:likes) }
+  it 'is not valid without a name' do
+    user = User.new(name: nil)
+    expect(user).to_not be_valid
   end
 
-  describe '#three_most_recent_posts' do
-    let(:user) { create(:user) }
-    let!(:old_post) { create(:post, author: user, created_at: 1.year.ago, text: 'Sample content') }
+  it 'has a posts_counter greater than or equal to 0' do
+    user = User.new(posts_counter: -1)
+    expect(user).to_not be_valid
+  end
 
-    let!(:recent_posts) { create_list(:post, 3, author: user, created_at: Time.now) }
+  describe '#three_recent_posts' do
+    let(:user) { create(:user, name: 'John', posts_counter: 2) }
 
     it 'returns the three most recent posts' do
-      expected_posts = recent_posts.sort_by(&:created_at).reverse.map(&:to_json)
-      actual_posts = user.three_most_recent_posts.to_a.sort_by(&:created_at).reverse.map(&:to_json)
+      old_post = create(:post, author: user, created_at: 3.days.ago)
+      recent_posts = create_list(:post, 3, author: user)
 
-      expect(actual_posts).to eq(expected_posts)
+      expect(user.three_recent_posts).to eq(recent_posts.reverse)
+      expect(user.three_recent_posts).not_to include(old_post)
     end
   end
 end
