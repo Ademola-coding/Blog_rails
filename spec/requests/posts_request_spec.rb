@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PostsController, type: :request do
-  let(:user) { FactoryBot.create(:user) }
-  let(:post) { FactoryBot.create(:post, author: user) }
+  let(:user) { create(:user) }
+  let(:post) { create(:post, author: user) }
 
   describe 'GET #index' do
     before { get user_posts_path(user) }
