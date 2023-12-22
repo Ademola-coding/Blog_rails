@@ -18,7 +18,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   describe 'GET #show' do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { create(:user) }
 
     before { get user_path(user) }
 
