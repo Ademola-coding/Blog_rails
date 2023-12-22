@@ -14,7 +14,7 @@ RSpec.describe User, type: :system do
 
     it 'I can see the user\'s profile picture' do
       # Ensure that the user's profile picture is visible on the page
-      expect(page).to have_selector('img')
+      expect(page).to have_css('img')
     end
 
     it 'I can see the user\'s username' do
