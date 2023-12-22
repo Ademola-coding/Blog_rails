@@ -1,22 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  before(:all) do
-    @user = User.new(name: 'John', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Teacher from Poland.',
-                     posts_counter: 0)
+  it 'is valid with valid attributes' do
+    user = User.new(name: 'John', posts_counter: 2)
+    expect(user).to be_valid
   end
 
-  context 'User implementation testing' do
-    it 'User name should be present' do
-      expect(@user.name).to eq('John')
-    end
+  it 'is not valid without a name' do
+    user = User.new(name: nil)
+    expect(user).to_not be_valid
+  end
 
-    it 'Recent post method should return zero' do
-      expect(@user.three_most_recent_post.length).to be 0
-    end
+  it 'has a posts_counter greater than or equal to 0' do
+    user = User.new(posts_counter: -1)
+    expect(user).to_not be_valid
+  end
 
-    it 'Post counter should be an interger' do
-      expect(@user.posts_counter).to be_a_kind_of(Numeric)
+  describe '#three_recent_posts' do
+    let(:user) { create(:user, name: 'John', posts_counter: 2) }
+
+    it 'returns the three most recent posts' do
+      old_post = create(:post, author: user, created_at: 3.days.ago)
+      recent_posts = create_list(:post, 3, author: user)
+
+      expect(user.three_recent_posts).to eq(recent_posts.reverse)
+      expect(user.three_recent_posts).not_to include(old_post)
     end
   end
 end

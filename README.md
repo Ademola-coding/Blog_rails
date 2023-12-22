@@ -30,7 +30,7 @@ For more information on the importance of a professional README for your reposit
 
 <div align="center">
   <!-- You are encouraged to replace this logo with your own! Otherwise you can also remove it. -->
-  <img src="murple_logo.png" alt="logo" width="140"  height="auto" />
+   <!-- <img src="murple_logo.png" alt="logo" width="140"  height="auto" /> -->
   <br/>
 
 </div>
@@ -141,6 +141,11 @@ rail server
 - Twitter: [@twitterhandle](https://twitter.com/steady1700)
 - LinkedIn: [LinkedIn](https://linkedin.com/in/ademola-owoeye)
 
+### Futre Features <a name="future-features"></a>
+
+- **[Allow_users_to_bookmark_blog_post]**
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
@@ -161,10 +166,10 @@ If you like this project kind assist in giving a star
 <p align="right">(<a href="#readme-top">back to 
 <!-- LICENSE -->
 
-## 📝 License <a name="license"></a>
-
-This project is [MIT](https://github.com/Ademola-coding/Blog_rails/blob/DEV/MIT.md) licensed.
+## 📝 License <a name="license"></
+This project is [MIT](https://github.com/Ademola-coding/Blog_rails/blob/Integrate-specs-for-views-and-fix-n+1-problems/MIT.md) licensed
 
 _NOTE: we recommend using the [MIT license](https://choosealicense.com/licenses/mit/) - you can set it up quickly by [using templates available on GitHub](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository). You can also use [any other license](https://choosealicense.com/licenses/) if you wish._
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+

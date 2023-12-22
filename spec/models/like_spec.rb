@@ -1,14 +1,13 @@
+# spec/models/like_spec.rb
 require 'rails_helper'
 
 RSpec.describe Like, type: :model do
-  before(:all) do
-    @user = User.new(name: 'Lilly', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Teacher from Poland.')
-    @post = Post.new(title: 'My first post', text: 'This is my first post.', author: @user, comments_counter: 4,
-                     likes_counter: 6)
-  end
+  let(:user) { create(:user) }
+  let(:post) { create(:post, author: user) }
 
-  it 'increments likes_counter by 1' do
-    @post.increment!(:likes_counter)
-    expect(@post.likes_counter).to eq(7)
+  it 'updates likes counter after creation' do
+    Like.create!(post:, user:)
+    post.reload
+    expect(post.likes_counter).to eq(1)
   end
 end
